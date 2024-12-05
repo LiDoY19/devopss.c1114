@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+    flask-app:
+    build: .
+    context: .
+    ports:
+        - "5000:5000"
+    environment:
+    depends_on:
+        -  mysql
+    volumes:
+        - .:/app
+
+
+    mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+    ports:
+        - "3306:3306"
+    volumes:
+        - mysql_date:var/lib/mysql
+
+volumes:
+    mysql_date
