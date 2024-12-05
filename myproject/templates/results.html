@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Search Results</h1>
+        {% if data.result and data.result|length > 0 %}
+            {% for result in data.result %}
+                <p><strong>Anime:</strong> 
+                    {{ result.anilist.title.english 
+                        or result.anilist.title.romaji 
+                        or 'Unknown Title' }}</p>
+                <p><strong>Episode:</strong> {{ result.episode or 'Unknown' }}</p>
+                <p><strong>Timestamp:</strong> 
+                    {{ result.from|round(2) }} - {{ result.to|round(2) }}</p>
+                <img src="{{ result.image or '' }}" alt="Preview" class="img-fluid mb-3">
+                <hr>
+            {% endfor %}
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+        <a href="/" class="btn btn-secondary mt-3">Back to Home</a>
+    </div>
+</body>
+</html>
