@@ -1,0 +1,40 @@
+services:
+  flask-app:
+    container_name: FlaskApp
+    build:
+      context: .
+    secrets:
+      - db_secrets
+    environment:
+      DB_SECRETS_FILE: "/run/secrets/db_secrets"  
+      FLASK_ENV: development                      
+    depends_on:
+      db:
+        condition: service_healthy                                   
+    ports:
+      - "8888:8888"                           
+    volumes:
+      - .:/app                                   
+
+  db:
+    container_name: FlaskApp_DB
+    image: mysql:8.0                              
+    restart: always                            
+    secrets:
+      - db_secrets                            
+    ports:
+      - "3306:3306"                              
+    volumes:
+      - mysql_data:/var/lib/mysql                 
+      - ./init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$MYSQL_ROOT_PASSWORD || exit 1"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  mysql_data:                                   
+
+secrets:
+  db_secrets:
+    file: ./db_secrets.txt

@@ -1,33 +1,54 @@
+import time
+import mysql.connector
 from flask import Flask, render_template
-import os
-import random
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-# list of images
-images = [
-    "https://c.tenor.com/0fI0vd8FEsoAAAAd/tenor.gif",
-    "https://www.rockhamptonzoo.com.au/files/assets/rockyzoo/v/1/images-thumbs/meerkat-close-up-thumb-nail.png?dimension=pageimage&w=480",
-    "https://c.tenor.com/0fI0vd8FEsoAAAAd/tenor.gif", 
-    "https://c.tenor.com/4NLfMi7XI7kAAAAd/tenor.gif",
-    "https://c.tenor.com/KMuLEm4XapgAAAAd/tenor.gif",
-    "https://c.tenor.com/DXBMFHbQ0AAAAAAd/tenor.gif",
-    "https://c.tenor.com/-VFGlrBlcSwAAAAd/tenor.gif",
-    "https://c.tenor.com/WcoyIUKbg5oAAAAd/tenor.gif",
-    "https://media1.tenor.com/m/306nYrZprbEAAAAd/timon-lion-king.gif",
-    "https://media1.tenor.com/m/J4F181cEBV0AAAAd/the-lion-king-timon.gif",
-    "https://media1.tenor.com/m/Kr7oesiWatIAAAAd/lion-king-oh-the-shame.gif", 
-    "https://c.tenor.com/2GeIejx2hbYAAAAd/tenor.gif",
-    "https://media1.tenor.com/m/v6w_poAU3LoAAAAd/achin-for-some-bacon-lion-king.gif",
-    "https://media1.tenor.com/m/G34k5QDbCA0AAAAC/timon-and-pumbaa-cry.gif"
-]
+# Load secrets
+def get_secrets():
+    secrets = {}
+    with open('/run/secrets/db_secrets', 'r') as file:
+        for line in file:
+            key, value = line.strip().split('=', 1)
+            secrets[key] = value
+    return secrets
 
+secrets = get_secrets()
+
+# Configure the database URI
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://root:{secrets['MYSQL_ROOT_PASSWORD']}@db/{secrets['MYSQL_DATABASE']}"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize SQLAlchemy
+db = SQLAlchemy(app)
+
+# Retry database connection
+def wait_for_db():
+    while True:
+        try:
+            conn = mysql.connector.connect(
+                host="db",
+                user="root",
+                password=secrets['MYSQL_ROOT_PASSWORD']
+            )
+            conn.close()
+            break
+        except mysql.connector.Error:
+            print("Waiting for database...")
+            time.sleep(5)
+
+wait_for_db()
+
+# Define the Image model
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(500), nullable=False)
 
 @app.route("/")
 def index():
-    url = random.choice(images)
-    return render_template("index.html", url=url)
-
+    image = Image.query.order_by(db.func.random()).first()
+    return render_template("index.html", url=image.url if image else None)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8888)))
+    app.run(host="0.0.0.0", port=8888)
