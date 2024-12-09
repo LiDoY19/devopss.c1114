@@ -2,7 +2,6 @@ CREATE TABLE gifs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     url VARCHAR(255) NOT NULL
 );
-
 INSERT INTO gifs (url) VALUES 
 ('https://c.tenor.com/-VFGlrBlcSwAAAAd/tenor.gif'),
 ('https://c.tenor.com/0fI0vd8FEsoAAAAd/tenor.gif'),
