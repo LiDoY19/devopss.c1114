@@ -1,0 +1,149 @@
+:root {
+    --primary-color: #191970; /* Field color */
+    --secondary-color: #8A9CD2; /* Pastel complement */
+    --background-color: #E6E6FA; /* Pastel background */
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    font-family: Arial, sans-serif;
+    color: var(--primary-color);
+    text-align: center;
+  }
+  
+  /* Top Bar with moving text */
+  .top-bar {
+    position: relative;
+    background-color: #FFFFFF; 
+    overflow: hidden;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-bottom: 2px solid var(--primary-color);
+  }
+  
+  .top-bar .marquee-text {
+    white-space: nowrap;
+    display: inline-block;
+    animation: marquee 10s linear infinite;
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 1.2em;
+    padding-left: 100%;
+  }
+  
+  @keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  
+  /* GIF Container */
+  .gif-container {
+    display: inline-block;
+    border: 10px solid var(--primary-color);
+    padding: 10px;
+    margin: 20px auto;
+    background-color: #FFFFFF;
+    position: relative;
+  }
+  
+  /* Loader (Sound wave) - shown when data is loading */
+  .loader {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    margin: 20px 0;
+  }
+  
+  .loader div {
+    width: 5px;
+    background: var(--secondary-color);
+    animation: wave 1.2s infinite ease-in-out;
+  }
+  
+  .loader div:nth-child(1) { animation-delay: 0s; height: 20px; }
+  .loader div:nth-child(2) { animation-delay: 0.1s; height: 30px; }
+  .loader div:nth-child(3) { animation-delay: 0.2s; height: 40px; }
+  .loader div:nth-child(4) { animation-delay: 0.3s; height: 30px; }
+  .loader div:nth-child(5) { animation-delay: 0.4s; height: 20px; }
+  
+  @keyframes wave {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(2); }
+  }
+  
+  /* Rating Stars */
+  .rating {
+    display: inline-flex;
+    margin: 20px 0;
+    cursor: pointer;
+  }
+  
+  .rating input {
+    display: none;
+  }
+  
+  .rating label {
+    font-size: 2em;
+    color: var(--secondary-color);
+    transition: color 0.2s;
+    padding: 0 5px;
+  }
+  
+  .rating label:hover, .rating label:hover ~ label,
+  .rating input:checked ~ label {
+    color: var(--primary-color);
+  }
+  
+  /* Share Buttons */
+  .share-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+  }
+  
+  .share-button {
+    width: 40px;
+    height: 40px;
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    font-size: 1.2em;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  .share-button:hover {
+    background-color: var(--primary-color);
+    transform: scale(1.1);
+  }
+  
+  /* Example icons using text representation:
+     W = WhatsApp, X = Twitter, F = Facebook, I = Instagram, ↗ = URL share
+     In a real scenario, replace these with actual SVG icons.
+  */
+  .share-button.whatsapp::before {
+    content: "W";
+  }
+  .share-button.twitter::before {
+    content: "X";
+  }
+  .share-button.facebook::before {
+    content: "F";
+  }
+  .share-button.instagram::before {
+    content: "I";
+  }
+  .share-button.url-share::before {
+    content: "✈"; /* Paper airplane char */
+  }
