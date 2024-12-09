@@ -1,3 +1,4 @@
+USE mydatabase;
 CREATE TABLE gifs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     url VARCHAR(255) NOT NULL
@@ -15,3 +16,9 @@ INSERT INTO gifs (url) VALUES
 ('https://media1.tenor.com/m/J4F181cEBV0AAAAd/the-lion-king-timon.gif'),
 ('https://media1.tenor.com/m/Kr7oesiWatIAAAAd/lion-king-oh-the-shame.gif'),
 ('https://media1.tenor.com/m/v6w_poAU3LoAAAAd/achin-for-some-bacon-lion-king.gif');
+
+CREATE TABLE IF NOT EXISTS visitors (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  count INT NOT NULL
+);
+INSERT INTO visitors (count) VALUES (0);

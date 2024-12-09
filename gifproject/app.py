@@ -37,4 +37,4 @@ if __name__ == '__main__':
     # Use the environment variables for host/port if available
     host = os.environ.get('FLASK_RUN_HOST', '0.0.0.0')
     port = int(os.environ.get('FLASK_RUN_PORT', 5000))
-    app.run(host=host, port=port)
+    app.run(host=host, port=port, debug=True)
