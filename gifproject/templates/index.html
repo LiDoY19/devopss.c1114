@@ -32,6 +32,8 @@
     </style>
 </head>
 <body>
+    <p>Total visitors: {{ visitor_count }}</p>
+    
     <div class="gif-container">
         {% if gif_url %}
             <img src="{{ gif_url }}" alt="Random GIF" />
